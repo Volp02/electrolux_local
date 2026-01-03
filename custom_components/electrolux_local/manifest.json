@@ -1,0 +1,11 @@
+{
+  "domain": "electrolux_local",
+  "name": "Electrolux Local Control",
+  "codeowners": [],
+  "config_flow": true,
+  "dependencies": [],
+  "documentation": "https://github.com/example/electrolux_local",
+  "iot_class": "local_polling",
+  "requirements": ["broadlink>=0.13.0"],
+  "version": "1.0.0"
+}
