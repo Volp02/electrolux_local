@@ -4,8 +4,10 @@
   "codeowners": [],
   "config_flow": true,
   "dependencies": [],
-  "documentation": "https://github.com/example/electrolux_local",
+  "documentation": "https://github.com/Volp02/electrolux_local",
   "iot_class": "local_polling",
-  "requirements": ["broadlink>=0.13.0"],
+  "requirements": [
+    "broadlink>=0.13.0"
+  ],
   "version": "1.0.0"
 }
