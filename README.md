@@ -1,68 +1,67 @@
-# Electrolux Local for Home Assistant
+# Electrolux Local Control for Home Assistant
 
 [![hacs_badge](https://img.shields.io/badge/HACS-Custom-41BDF5.svg)](https://github.com/hacs/integration)
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/Volp02/electrolux_local)](https://github.com/Volp02/electrolux_local/releases)
+[![License](https://img.shields.io/github/license/Volp02/electrolux_local)](LICENSE)
 
-A custom component for **Home Assistant** that interacts with **Electrolux** appliances locally.
+A custom component for **Home Assistant** that provides **local** control for Electrolux/AEG appliances (specifically AC units with Broadlink chips, type `0x4f9b`) without relying on the discontinued Electrolux Cloud API.
 
 ## 🌟 Features
 
-* **Local Control**: Communicates directly with devices on your network (reducing latency and reliance on the cloud).
-* **Sensors**: Reads status, time remaining, and other sensor data.
-* **Controls**: Start/Stop/Pause functionality (depending on device support).
-* **Plug & Play**: Designed to work with the standard Home Assistant architecture.
+*   **100% Local Control**: No cloud dependency, no internet required, and no risk of API deprecation.
+*   **Fast Response**: Instant feedback compared to cloud polling.
+*   **Full Climate Control**:
+    *   Power (On/Off)
+    *   Operation Modes (Auto, Cool, Heat, Dry, Fan Only)
+    *   Fan Speeds (Auto, Low, Mid, High, Turbo, Quiet)
+    *   Target Temperature
+    *   Swing Mode (Vertical)
+    *   Current Temperature Sensor
+*   **Config Flow**: Easy setup via Home Assistant UI (auto-discovery or manual IP entry).
 
 ## 🚀 Installation
 
 ### Option 1: HACS (Recommended)
 
-1.  Open **HACS** in your Home Assistant instance.
-2.  Go to **Integrations**.
-3.  Click the three dots in the top right corner and select **Custom repositories**.
-4.  Paste the URL of this repository:
-    `https://github.com/Volp02/electrolux_local`
-5.  Select **Integration** as the category.
-6.  Click **Add**.
-7.  Once added, close the modal, search for "Electrolux Local," and install it.
-8.  **Restart Home Assistant**.
+1.  Open **HACS** in Home Assistant.
+2.  Go to **Integrations** > 3 dots (top right) > **Custom repositories**.
+3.  Add `https://github.com/Volp02/electrolux_local` with category **Integration**.
+4.  Click **Add** and then **Download**.
+5.  **Restart Home Assistant**.
 
 ### Option 2: Manual Installation
 
-1.  Download the latest release as a ZIP file.
+1.  Download the latest [Release](https://github.com/Volp02/electrolux_local/releases/latest).
 2.  Extract the `custom_components/electrolux_local` folder.
-3.  Copy this folder into your Home Assistant's `config/custom_components/` directory.
+3.  Copy this folder to your Home Assistant `config/custom_components/` directory.
 4.  **Restart Home Assistant**.
 
 ## ⚙️ Configuration
 
-1.  Go to **Settings** > **Devices & Services**.
-2.  Click **+ Add Integration**.
-3.  Search for **Electrolux Local**.
-4.  Follow the configuration steps (you may need to provide the IP address of your appliance or your Electrolux account credentials if a token is required).
+1.  Navigate to **Settings** > **Devices & Services** > **Add Integration**.
+2.  Search for **Electrolux Local Control**.
+3.  Enter the **IP Address** of your AC unit (e.g., `192.168.1.100`).
+    *   *Tip: Assign a static IP to your AC in your router settings to prevent connection issues.*
+4.  The integration will detect the MAC address and add the device.
 
 ## 📋 Supported Devices
 
-* [List devices here, e.g., Electrolux Washers]
-* [e.g., Electrolux Air Purifiers]
-* [e.g., AEG equivalents]
+*   **Electrolux WP71-265WT** (Portable Air Conditioner)
+*   Other Electrolux/AEG devices using the Broadlink `0x4f9b` OEM chip.
 
 ## 🛠 Troubleshooting
 
-If you encounter issues:
-1.  Enable debug logging in your `configuration.yaml`:
-    ```yaml
-    logger:
-      default: info
-      logs:
-        custom_components.electrolux_local: debug
-    ```
-2.  Check the Home Assistant logs for errors.
-3.  Open an issue on GitHub with your log output.
+**"Invalid handler specified" Error:**
+If you see this during setup, it usually means Home Assistant needs a restart to load the new config flow files properly. Restart HA and try again.
+
+**Device not found:**
+Ensure the device is powered on and connected to the same Wi-Fi network as Home Assistant. You can verify connectivity by pinging the IP address.
 
 ## ❤️ Credits
 
-* Maintained by [Volp02](https://github.com/Volp02)
+*   Based on reverse-engineering work by the Home Assistant community.
+*   Uses the [python-broadlink](https://github.com/mjg59/python-broadlink) library.
 
 ## 📄 License
 
-[License Name, e.g., MIT or Apache 2.0]
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
