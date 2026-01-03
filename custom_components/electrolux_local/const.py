@@ -1,4 +1,4 @@
-\"\"\"Constants for the Electrolux Local integration.\"\"\"
+"""Constants for the Electrolux Local integration."""
 
 DOMAIN = "electrolux_local"
 DEFAULT_NAME = "Electrolux Climate"

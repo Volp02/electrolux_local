@@ -25,12 +25,12 @@ class ElectroluxEntity(ClimateEntity):
     _attr_supported_features = (
         ClimateEntityFeature.TARGET_TEMPERATURE
         | ClimateEntityFeature.FAN_MODE
-        | ClimateEntityFeature.SWING_MODE
         | ClimateEntityFeature.TURN_OFF
         | ClimateEntityFeature.TURN_ON
     )
     _attr_hvac_modes = [HVACMode.OFF, HVACMode.HEAT, HVACMode.COOL, HVACMode.AUTO, HVACMode.DRY, HVACMode.FAN_ONLY]
-    _attr_fan_modes = ["auto", "low", "mid", "high", "turbo", "quiet"]
+    _attr_fan_modes = ["auto", "low", "mid", "high"]
+    _attr_target_temperature_step = 1
     
     # Map HA <-> Elec
     _HVAC_MAP = {
@@ -47,8 +47,6 @@ class ElectroluxEntity(ClimateEntity):
         "low": EleFan.LOW,
         "mid": EleFan.MID,
         "high": EleFan.HIGH,
-        "turbo": EleFan.TURBO,
-        "quiet": EleFan.QUIET
     }
     _FAN_MAP_INV = {v: k for k, v in _FAN_MAP.items()}
 
@@ -83,6 +81,8 @@ class ElectroluxEntity(ClimateEntity):
                 self._attr_fan_mode = self._FAN_MAP_INV.get(ele_fan, "auto")
             except ValueError:
                 self._attr_fan_mode = "auto"
+
+            # Swing - Removed
                 
         except Exception:
             self._attr_available = False
@@ -111,12 +111,3 @@ class ElectroluxEntity(ClimateEntity):
         ele_fan = self._FAN_MAP.get(fan_mode)
         if ele_fan:
              self._device.set_fan(ele_fan)
-    
-    def set_swing_mode(self, swing_mode):
-        # Simplified swing toggle
-        # HA uses SWING_ON / SWING_OFF usually or custom list
-        # Here we just assume vertical swing
-        if swing_mode == "vertical": # Example
-             self._device.set_swing_vertical(True)
-        else:
-             self._device.set_swing_vertical(False)
