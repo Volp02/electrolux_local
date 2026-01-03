@@ -5,15 +5,16 @@ import homeassistant.helpers.config_validation as cv
 from .const import DOMAIN, DEFAULT_NAME
 
 class ElectroluxConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
-    \"\"\"Handle a config flow for Electrolux Local.\"\"\"
+    """Handle a config flow for Electrolux Local."""
     VERSION = 1
 
     async def async_step_user(self, user_input=None):
-        \"\"\"Handle the initial step.\"\"\"
+        """Handle the initial step."""
         errors = {}
         if user_input is not None:
             host = user_input[CONF_HOST]
             try:
+                # We run this in executor because broadlink discovery is blocking IO
                 mac = await self.hass.async_add_executor_job(self._try_connect, host)
                 
                 await self.async_set_unique_id(mac)
@@ -39,12 +40,13 @@ class ElectroluxConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         )
 
     def _try_connect(self, host):
-        \"\"\"Try to connect and fetch MAC.\"\"\"
+        """Try to connect and fetch MAC."""
+        import broadlink # Import here to avoid top-level dependency issues
+        
         # Use simple discovery to verify device and get MAC
         devices = broadlink.discover(discover_ip_address=host, timeout=5)
         if devices:
             dev = devices[0]
-            # Verify type if we want, but mostly just check if we found it
-            # device type 0x4f9b
+            # Device type 0x4f9b check could happen here
             return dev.mac.hex()
         raise Exception("Device not found")
