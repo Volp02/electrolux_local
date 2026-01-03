@@ -13,11 +13,10 @@ A custom component for **Home Assistant** that provides **local** control for El
 *   **Full Climate Control**:
     *   Power (On/Off)
     *   Operation Modes (Auto, Cool, Heat, Dry, Fan Only)
-    *   Fan Speeds (Auto, Low, Mid, High, Turbo, Quiet)
+    *   Fan Speeds (Auto, Low, Mid, High)
     *   Target Temperature
-    *   Swing Mode (Vertical)
     *   Current Temperature Sensor
-*   **Config Flow**: Easy setup via Home Assistant UI (auto-discovery or manual IP entry).
+*   **Config Flow**: Easy setup via Home Assistant UI (manual IP entry).
 
 ## 🚀 Installation
 
@@ -47,7 +46,7 @@ A custom component for **Home Assistant** that provides **local** control for El
 ## 📋 Supported Devices
 
 *   **Electrolux WP71-265WT** (Portable Air Conditioner)
-*   Other Electrolux/AEG devices using the Broadlink `0x4f9b` OEM chip.
+*   Potentially other Electrolux/AEG devices using the Broadlink `0x4f9b` OEM chip.
 
 ## 🛠 Troubleshooting
 
