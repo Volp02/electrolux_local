@@ -13,11 +13,10 @@ A custom component for **Home Assistant** that provides **local** control for El
 *   **Full Climate Control**:
     *   Power (On/Off)
     *   Operation Modes (Auto, Cool, Heat, Dry, Fan Only)
-    *   Fan Speeds (Auto, Low, Mid, High, Turbo, Quiet)
+    *   Fan Speeds (Auto, Low, Mid, High)
     *   Target Temperature
-    *   Swing Mode (Vertical)
     *   Current Temperature Sensor
-*   **Config Flow**: Easy setup via Home Assistant UI (auto-discovery or manual IP entry).
+*   **Config Flow**: Easy setup via Home Assistant UI (manual IP entry).
 
 ## 🚀 Installation
 
