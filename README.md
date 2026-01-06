@@ -1,4 +1,4 @@
-# Electrolux Local Control for Home Assistant
+# Electrolux / AEG Local Control for Home Assistant
 
 [![hacs_badge](https://img.shields.io/badge/HACS-Custom-41BDF5.svg)](https://github.com/hacs/integration)
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/Volp02/electrolux_local)](https://github.com/Volp02/electrolux_local/releases)
