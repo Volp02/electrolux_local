@@ -6,6 +6,9 @@ from homeassistant.config_entries import ConfigEntry
 from .const import DOMAIN, CONF_HOST
 from .electrolux import ElectroluxClimate, HVACMode as EleMode, FanMode as EleFan
 import binascii
+import logging
+
+_LOGGER = logging.getLogger(__name__)
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback):
     host = entry.data[CONF_HOST]
@@ -14,9 +17,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_e
     
     # Init device
     mac_bytes = binascii.unhexlify(mac_hex)
-    device = ElectroluxClimate((host, 80), mac_bytes)
-    
-    async_add_entities([ElectroluxEntity(device, name, entry.entry_id)], True)
+    async_add_entities([ElectroluxEntity(host, mac_bytes, name, entry.entry_id)], True)
 
 class ElectroluxEntity(ClimateEntity):
     _attr_temperature_unit = UnitOfTemperature.CELSIUS
@@ -50,13 +51,28 @@ class ElectroluxEntity(ClimateEntity):
     }
     _FAN_MAP_INV = {v: k for k, v in _FAN_MAP.items()}
 
-    def __init__(self, device, name, unique_id):
-        self._device = device
+    def __init__(self, host, mac, name, unique_id):
+        self._host = host
+        self._mac = mac
+        self._name = name
         self._attr_unique_id = unique_id
-        # We don't set _attr_name to name because has_entity_name=True uses device name
+        
+        self._device = None
+        self._create_device()
+
+    def _create_device(self):
+        """Create or recreate the device instance."""
+        try:
+             _LOGGER.debug("Creating device instance for %s", self._host)
+             self._device = ElectroluxClimate((self._host, 80), self._mac)
+        except Exception as e:
+             _LOGGER.error("Failed to create device instance: %s", e)
 
     def update(self):
         # Blocking call in executor
+        if self._device is None:
+            self._create_device()
+            
         try:
             status = self._device.get_status()
             
@@ -84,8 +100,14 @@ class ElectroluxEntity(ClimateEntity):
 
             # Swing - Removed
                 
-        except Exception:
+        except Exception as e:
+            if self._attr_available:
+                _LOGGER.warning("Device connection lost: %s. Recreating device instance.", e)
+            
             self._attr_available = False
+            
+            # Recreate device to force fresh socket/session next time
+            self._create_device()
             return
             
         self._attr_available = True

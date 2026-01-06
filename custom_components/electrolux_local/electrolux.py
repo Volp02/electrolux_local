@@ -3,8 +3,12 @@ import typing as t
 from enum import IntEnum
 import json
 import binascii
+import time
 from broadlink.device import Device
 from broadlink.exceptions import DataValidationError
+import logging
+
+_LOGGER = logging.getLogger(__name__)
 
 # Constants
 MAX_TEMP = 32 # Usually max for ACs is around 30-32
@@ -38,7 +42,7 @@ class ElectroluxClimate(Device):
     def __init__(self, host: t.Tuple[str, int], mac: t.Union[bytes, str], devtype: int = DEVICE_TYPE, timeout: int = 10, name: str = "", model: str = "", manufacturer: str = "", is_locked: bool = False) -> None:
         super().__init__(host, mac, devtype, timeout, name, model, manufacturer, is_locked)
         if not self.auth():
-             pass # Auth often handled silently or raises error later
+             _LOGGER.warning("Initial authentication failed")
 
     def _send(self, command: int, data: bytes = b"") -> dict:
         """Send a packet to the device and return the decrypted JSON payload."""
@@ -55,7 +59,22 @@ class ElectroluxClimate(Device):
         d_checksum = sum(packet[0x08:], 0xC0AD) & 0xFFFF
         packet[0x06:0x08] = d_checksum.to_bytes(2, "little")
 
-        resp = self.send_packet(0x6A, packet)
+        try:
+            resp = self.send_packet(0x6A, packet)
+        except Exception as e:
+            _LOGGER.warning("Send failed (%s), attempting re-auth", e)
+            try:
+                if self.auth():
+                    _LOGGER.warning("Re-authenticated with device")
+                    time.sleep(0.5) # Give it a moment
+                    resp = self.send_packet(0x6A, packet)
+                else:
+                    _LOGGER.warning("Re-authentication failed (auth() returned False)")
+                    raise e
+            except Exception as auth_e:
+                _LOGGER.warning("Re-authentication failed with error: %s", auth_e)
+                # If auth failed, raise original error so we know it was a send failure originally
+                raise e
         
         # Check broadlink error code
         err = resp[0x22:0x24]
