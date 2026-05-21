@@ -1,0 +1,20 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Electrolux/AEG Lokale Steuerung",
+        "description": "Bitte gib die IP-Adresse deines Klimageräts ein. Die Integration wird versuchen, die MAC-Adresse automatisch abzurufen.",
+        "data": {
+          "host": "IP-Adresse",
+          "name": "Name des Geräts"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Verbindung zum Gerät fehlgeschlagen. Überprüfe die IP-Adresse und ob das Gerät erreichbar ist."
+    },
+    "abort": {
+      "already_configured": "Dieses Gerät ist bereits konfiguriert."
+    }
+  }
+}

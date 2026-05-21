@@ -1,0 +1,20 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Electrolux/AEG Local Control",
+        "description": "Please enter the IP address of your climate device. The integration will try to fetch the MAC address automatically.",
+        "data": {
+          "host": "IP address",
+          "name": "Device name"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Failed to connect to the device. Please check the IP address and make sure the device is online."
+    },
+    "abort": {
+      "already_configured": "This device is already configured."
+    }
+  }
+}

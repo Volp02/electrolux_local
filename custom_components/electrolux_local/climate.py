@@ -112,24 +112,37 @@ class ElectroluxEntity(ClimateEntity):
             
         self._attr_available = True
 
-    def set_hvac_mode(self, hvac_mode):
+    async def async_set_hvac_mode(self, hvac_mode):
         if hvac_mode == HVACMode.OFF:
-            self._device.set_power(False)
+            await self.hass.async_add_executor_job(self._device.set_power, False)
         else:
             # check if we need to turn on
             if self._attr_hvac_mode == HVACMode.OFF:
-                self._device.set_power(True)
+                await self.hass.async_add_executor_job(self._device.set_power, True)
             
             ele_mode = self._HVAC_MAP.get(hvac_mode)
-            if ele_mode:
-                self._device.set_mode(ele_mode)
+            if ele_mode is not None:
+                await self.hass.async_add_executor_job(self._device.set_mode, ele_mode)
+        self.async_write_ha_state()
         
-    def set_temperature(self, **kwargs):
+    async def async_set_temperature(self, **kwargs):
         temp = kwargs.get(ATTR_TEMPERATURE)
         if temp:
-            self._device.set_temp(int(temp))
+            await self.hass.async_add_executor_job(self._device.set_temp, int(temp))
+            self.async_write_ha_state()
 
-    def set_fan_mode(self, fan_mode):
+    async def async_set_fan_mode(self, fan_mode):
         ele_fan = self._FAN_MAP.get(fan_mode)
-        if ele_fan:
-             self._device.set_fan(ele_fan)
+        if ele_fan is not None:
+             await self.hass.async_add_executor_job(self._device.set_fan, ele_fan)
+             self.async_write_ha_state()
+
+    async def async_turn_on(self) -> None:
+        """Turn the entity on."""
+        await self.hass.async_add_executor_job(self._device.set_power, True)
+        self.async_write_ha_state()
+
+    async def async_turn_off(self) -> None:
+        """Turn the entity off."""
+        await self.hass.async_add_executor_job(self._device.set_power, False)
+        self.async_write_ha_state()
