@@ -46,6 +46,7 @@ A custom component for **Home Assistant** that provides **local** control for El
 ## 📋 Supported Devices
 
 *   **Electrolux WP71-265WT** (Portable Air Conditioner)
+*   **AEG Px71-265WT** (Same device, diffrent brand)
 *   Potentially other Electrolux/AEG devices using the Broadlink `0x4f9b` OEM chip.
 
 ## 🛠 Troubleshooting
